@@ -1,6 +1,9 @@
-gst-plugins-imsdk (0.1.0-1) UNRELEASED; urgency=medium
+gst-plugins-imsdk (1.0.2-1) UNRELEASED; urgency=medium
 
-  * Add initial Debian packaging support
+  * Initial packaging: build the Qualcomm IM SDK GStreamer plugins from tag
+    1.0.2 (806ad865) with the feature switches of the Yocto recipe
+    (base + camera + camera-apps), producing gst-plugins-imsdk-base
+    (libgstqti*base.so.1) and gst-plugins-imsdk-camsrc
+    (libgstqticamsrc.so, the qtiqmmfsrc element).
 
- -- "Radxa Computer (Shenzhen) Co., Ltd." <dev@radxa.com>  Thu, 01 Jan 1970 08:00:00 +0800
-
+ -- "Radxa Computer Co., Ltd" <dev@radxa.com>  Wed, 30 Sep 2026 15:00:00 +0800

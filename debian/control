@@ -9,12 +9,52 @@ Build-Depends: debhelper-compat (= 13),
                lintian,
                dh-exec,
                pandoc,
+               cmake,
+               ninja-build,
+               pkg-config,
+               libgstreamer1.0-dev,
+               libgstreamer-plugins-base1.0-dev,
+               libglib2.0-dev,
+               libjson-glib-dev,
+               camx-service-dev,
 
-Package: gst-plugins-imsdk
+Package: gst-plugins-imsdk-camsrc
 Architecture: all
 Section: admin
 Priority: optional
-Depends: ${misc:Depends},
-Description: gst-plugins-imsdk
- This package provides the gst-plugins-imsdk.
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Conflicts: gstreamer1.0-plugins-qcom-camsrc,
+           gstreamer1.0-plugins-qcom-qmmfsrc,
+           gstreamer1.0-plugins-qcom-base,
+Replaces: gstreamer1.0-plugins-qcom-camsrc,
+          gstreamer1.0-plugins-qcom-qmmfsrc,
+          gstreamer1.0-plugins-qcom-base,
+Breaks: gstreamer1.0-plugins-qcom-camsrc,
+        gstreamer1.0-plugins-qcom-qmmfsrc,
+        gstreamer1.0-plugins-qcom-base,
+Description: Qualcomm IMSDK GStreamer camera source plugin (qtiqmmfsrc)
+ Provides the qtiqmmfsrc GStreamer element from the Qualcomm IM SDK
+ (gst-plugins-imsdk, gst-plugin-qmmfsrc), built against the RadxaOS
+ camera stack.
+ .
+ This package installs the same file as the Qualcomm PPA package
+ gstreamer1.0-plugins-qcom-camsrc, so the two cannot be installed
+ together.
 
+Package: gst-plugins-imsdk-base
+Architecture: all
+Section: admin
+Priority: optional
+Depends: ${shlibs:Depends},
+         ${misc:Depends},
+Conflicts: gstreamer1.0-plugins-qcom-base,
+Replaces: gstreamer1.0-plugins-qcom-base,
+Breaks: gstreamer1.0-plugins-qcom-base,
+Description: Qualcomm IMSDK GStreamer base libraries
+ Shared base libraries used by the Qualcomm IMSDK GStreamer plugins
+ (libgstqti{camera,video,gfx,utils,allocators,cv,memory,ml}base).
+ .
+ This package installs the same files as the Qualcomm PPA package
+ gstreamer1.0-plugins-qcom-base, so the two cannot be installed
+ together.

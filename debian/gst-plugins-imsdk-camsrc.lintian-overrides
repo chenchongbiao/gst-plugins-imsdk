@@ -1,0 +1,2 @@
+arch-independent-package-contains-binary-or-object
+triplet-dir-and-architecture-mismatch is for arm64 instead of all [usr/lib/aarch64-linux-gnu/]

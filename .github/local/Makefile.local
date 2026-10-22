@@ -1,0 +1,31 @@
+GST_IMSDK_SRC ?= $(abspath src)
+GST_IMSDK_BUILD ?= $(abspath build)
+GST_COMPAT_H ?= $(abspath gst-plugins-base/include/qti-gst-format-compat.h)
+
+# arch:all gets no dbgsym, so -g only affects build-tree objects; shipped .so
+# files are stripped anyway.
+GST_IMSDK_RELEASE_FLAGS := -O3 -g -DNDEBUG -Wno-error=switch
+
+.PHONY: build-gst-plugins-imsdk
+build-gst-plugins-imsdk:
+	rm -rf $(GST_IMSDK_BUILD) debian/tmp
+	cmake -G Ninja -S $(GST_IMSDK_SRC) -B $(GST_IMSDK_BUILD) \
+		-DCMAKE_BUILD_TYPE=Release \
+		-DCMAKE_INSTALL_PREFIX=/usr \
+		-DCMAKE_SKIP_RPATH=ON \
+		-DCMAKE_C_FLAGS='-include $(GST_COMPAT_H)' \
+		-DCMAKE_CXX_FLAGS='-include $(GST_COMPAT_H)' \
+		-DCMAKE_C_FLAGS_RELEASE='$(GST_IMSDK_RELEASE_FLAGS)' \
+		-DCMAKE_CXX_FLAGS_RELEASE='$(GST_IMSDK_RELEASE_FLAGS)' \
+		-DENABLE_GST_IMSDK_PLUGINS=OFF \
+		-DENABLE_GST_PLUGIN_BASE=ON \
+		-DENABLE_GST_PLUGIN_CAMERA_BASE=ON \
+		-DENABLE_GST_PLUGIN_QMMFSRC=1 \
+		-DVHDR_MODES_ENABLE=ON \
+		-DEIS_MODES_ENABLE=ON \
+		-DFEATURE_OFFLINE_IFE_SUPPORT=ON
+	ninja -C $(GST_IMSDK_BUILD)
+	DESTDIR=$(CURDIR)/debian/tmp ninja -C $(GST_IMSDK_BUILD) install
+	# Keep runtime files only; remove headers, pkg-config files and development .so symlinks.
+	rm -rf $(CURDIR)/debian/tmp/usr/include $(CURDIR)/debian/tmp/usr/lib/*/pkgconfig
+	find $(CURDIR)/debian/tmp/usr/lib/*/ -maxdepth 1 -name 'libgstqti*base.so' -delete

@@ -1,0 +1,22 @@
+override_dh_auto_configure:
+
+override_dh_auto_build:
+
+override_dh_auto_test:
+
+override_dh_auto_install:
+
+override_dh_install:
+	$(MAKE) build-gst-plugins-imsdk
+	dh_install --sourcedir=debian/tmp
+
+override_dh_missing:
+	dh_missing --fail-missing
+
+# arch:all builds skip dh_strip/dh_makeshlibs/dh_shlibdeps entirely (-a matches
+# nothing, overrides included), so run them by package name to keep strip+shlibs.
+override_dh_installdeb:
+	dh_strip -pgst-plugins-imsdk-base -pgst-plugins-imsdk-camsrc
+	dh_makeshlibs -pgst-plugins-imsdk-base
+	dh_shlibdeps -pgst-plugins-imsdk-base -pgst-plugins-imsdk-camsrc
+	dh_installdeb

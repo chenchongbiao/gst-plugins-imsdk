@@ -8,3 +8,5 @@
 /*.substvars
 /tmp
 
+/gst-plugins-imsdk-base
+/gst-plugins-imsdk-camsrc
